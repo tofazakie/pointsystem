@@ -36,6 +36,29 @@ class PointSystemTest extends TestCase
 
 
     /**
+     * A failed login test.
+     *
+     * @return void
+     */
+     public function testFailedLogin()
+    {
+        $parameters = [
+            'email' => 'user1@mail.com',
+            'password' => 'secret3'
+        ];
+
+        $this->post('/v1/login', $parameters, []);
+        $this->seeStatusCode(200);
+        $this->seeJsonStructure(
+            [
+                'response_code'=> '01',
+                'message' => 'authentication failed'
+            ]    
+        );
+    }
+
+
+    /**
      * A set user point test.
      *
      * @return void
