@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePointsTrxTable extends Migration
+class CreateUserPointsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreatePointsTrxTable extends Migration
      */
     public function up()
     {
-        Schema::create('points_trx', function (Blueprint $table) {
+        Schema::create('user_points', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
             $table->integer('point_type_id');
             $table->integer('amount');
-            $table->string('description');
-            $table->timestamps();
         });
     }
 
@@ -30,7 +28,6 @@ class CreatePointsTrxTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('point_trx');
+        Schema::dropIfExists('user_point');
     }
 }
-

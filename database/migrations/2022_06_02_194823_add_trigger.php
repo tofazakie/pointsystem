@@ -13,13 +13,15 @@ class AddTrigger extends Migration
      */
     public function up()
     {
-        DB::unprepared('CREATE TRIGGER add_point AFTER INSERT ON `points_trx` FOR EACH ROW
+        DB::unprepared('CREATE TRIGGER add_point AFTER INSERT ON `point_trxs` FOR EACH ROW
                         BEGIN
-                            SET @CEK = (SELECT COUNT(*) FROM `user_point` WHERE `user_id` = NEW.user_id AND `point_type_id` = NEW.point_type_id);
-                            IF @CEK > 1 THEN
-                                UPDATE `user_point` SET amount = amount + NEW.amount;
+                            SET @VAL = (SELECT amount FROM `user_points` WHERE `user_id` = NEW.user_id AND `point_type_id` = NEW.point_type_id);
+                            IF @VAL IS NOT NULL THEN
+                                SET @NEW_VAL = @VAL + NEW.amount;
+                                IF @NEW_VAL < 0 THEN SET @NEW_VAL = 0; END IF;
+                                UPDATE `user_points` SET amount = @NEW_VAL WHERE `user_id` = NEW.user_id AND `point_type_id` = NEW.point_type_id;
                             ELSE
-                                INSERT INTO `user_point` (`user_id`, `point_type_id`, `amount`) VALUES (NEW.user_id, NEW.point_type_id, NEW.amount);
+                                INSERT INTO `user_points` (`user_id`, `point_type_id`, `amount`) VALUES (NEW.user_id, NEW.point_type_id, NEW.amount);
                             END IF;
                         END');
     }
