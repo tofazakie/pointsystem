@@ -21,14 +21,13 @@ class PointSystemTest extends TestCase
         $this->seeStatusCode(200);
         $this->seeJsonStructure(
             [
-                'response_code'=> '00',
-                'message' => 'success',
+                'response_code',
+                'message',
                 'data' =>
                 [
                     'access_token',
                     'token_type',
-                    'expires_in',
-                    'user'
+                    'expires_in'
                 ]
             ]    
         );
@@ -48,11 +47,33 @@ class PointSystemTest extends TestCase
         ];
 
         $this->post('/v1/login', $parameters, []);
-        $this->seeStatusCode(200);
+        $this->seeStatusCode(401);
         $this->seeJsonStructure(
             [
-                'response_code'=> '01',
-                'message' => 'authentication failed'
+                'response_code',
+                'message'
+            ]    
+        );
+    }
+
+
+    /**
+     * A failed login test.
+     *
+     * @return void
+     */
+     public function testIncompleteParamsLogin()
+    {
+        $parameters = [
+            'email' => 'user1@mail.com'
+        ];
+
+        $this->post('/v1/login', $parameters, []);
+        $this->seeStatusCode(422);
+        $this->seeJsonStructure(
+            [
+                'response_code',
+                'message'
             ]    
         );
     }
@@ -65,26 +86,34 @@ class PointSystemTest extends TestCase
      */
     public function testSetUserPoint()
     {
+        // login user
+        $response = $this->call('POST', '/v1/login', 
+                    [
+                        "email" => "user1@mail.com",
+                        "password" => "secret1"
+                    ], [], [], []);
+
+        $response = json_decode($response->getContent());
+        $token = $response->data->access_token;
+
+        $headers = [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token
+                    ];
+
         $parameters = [
-            'point_type_id' => '1',
-            'amount' => '4',
+            'point_type_id' => 1,
+            'amount' => 3,
             'description' => 'order #4654'
         ];
 
-        $this->post('/v1/setpoint', $parameters, []);
+        $this->post('/v1/setuserpoint', $parameters, $headers);
         $this->seeStatusCode(200);
         $this->seeJsonStructure(
             [
-                'response_code'=> '00',
-                'message' => 'success',
-                'data' =>
-                [
-                    '*' => [
-                        'point_type_id',
-                        'point_name',
-                        'amount'
-                    ]
-                ]
+                'response_code',
+                'message'
             ]    
         );
     }
