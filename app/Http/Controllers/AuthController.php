@@ -19,12 +19,55 @@ class AuthController extends Controller
     }
 
 	
-     /**
-     * Get a JWT via given credentials.
+    /**
+     * @OA\Post(
+     *   path="/pointsystem/public/v1/login",
+     *   tags={"Login"},
+     *   summary="Login to authnticate user",
+     *   description="Authenticate User",
+     *   operationId="login",
      *
-     * @param  Request  $request
-     * @return Response
-     */	 
+     *   @OA\Parameter(
+     *      name="email",
+     *      description="User email",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="password",
+     *      description="User password",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *          type="string"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthenticated",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=422,
+     *      description="Incomplete parameter(s)",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   )
+     *)
+     **/
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
