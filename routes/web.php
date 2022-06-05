@@ -16,3 +16,12 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'v1'], function () use ($router) {
+   $router->post('login', 'AuthController@login');
+});
+
+$router->group(['middleware' => 'auth','prefix' => 'v1'], function ($router) {
+    $router->post('setuserpoint', 'ApiController@setUserPoint');
+    $router->post('user', 'ApiController@getUserFromJWT');
+});
