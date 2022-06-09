@@ -117,4 +117,45 @@ class PointSystemTest extends TestCase
             ]    
         );
     }
+
+    /**
+     * A get user points test.
+     *
+     * @return void
+     */
+     public function testGetUserPoints()
+    {
+        // login user
+        $response = $this->call('POST', '/v1/login', 
+                    [
+                        "email" => "user1@mail.com",
+                        "password" => "secret1"
+                    ], [], [], []);
+
+        $response = json_decode($response->getContent());
+        $token = $response->data->access_token;
+
+        $headers = [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token
+                    ];
+
+        $this->get('/v1/getuserpoint', $headers);
+        $this->seeStatusCode(200);
+        $this->seeJsonStructure(
+            [
+                'response_code',
+                'message',
+                'data' => 
+                [
+                    '*' => [
+                        'point_type_id',
+                        'point_type_name',
+                        'amount'
+                    ]
+                ]
+            ]    
+        );
+    }
 }
