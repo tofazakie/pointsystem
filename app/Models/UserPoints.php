@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PointTypes extends Model
+class UserPoints extends Model
 {
     use HasFactory;
 
@@ -15,22 +15,20 @@ class PointTypes extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'user_id',
+        'point_type_id',
+        'value'
     ];
 
     /**
-     * Get array of point types.
+     * Get user points.
      *
      * @var array
      */
-    public static function arrPointTypes()
+    public static function getUserPoint($user_id)
     {
-        $types = self::get();
-        $arr = [];
-        foreach($types as $type){
-            $arr[$type->id] = $type->name;
-        }
+        $points = self::where('user_id', $user_id)->get();
 
-        return $arr;
+        return $points;
     }
 }

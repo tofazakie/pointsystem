@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\PointTrxs;
+use App\Models\PointTypes;
+use App\Models\UserPoints;
 use Input;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -116,6 +118,30 @@ class ApiController extends Controller
         $user = JWTAuth::toUser($token);
 
         return $user;
+    }
+
+
+    public function getUserPoint(Request $request)
+    {
+        $token = JWTAuth::getToken();
+        $user = self::authorize_user($token);
+
+        if($user){
+            $arrPointTypes = PointTypes::arrPointTypes();
+            $points = UserPoints::getUserPoint($user->id);
+
+            $data = [];
+            foreach($points as $point){
+                $dt['point_type_id'] = $point->point_type_id;
+                $dt['point_type_name'] = $arrPointTypes[$point->point_type_id];
+                $dt['amount'] = $point->amount;
+                $data[] = $dt;
+            }
+            
+            return response()->json(['response_code' => '00', 'message' => 'success', 'data' => $data], 200);
+        } else {
+            return response()->json(['response_code' => '01', 'message' => 'Unauthorized'], 401);
+        }
     }
 	
 }
