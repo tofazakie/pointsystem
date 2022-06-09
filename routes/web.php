@@ -22,6 +22,6 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
 });
 
 $router->group(['middleware' => 'auth','prefix' => 'v1'], function ($router) {
-    $router->post('setuserpoint', 'ApiController@setUserPoint');
-    $router->post('user', 'ApiController@getUserFromJWT');
+    $router->post('userpoint', 'ApiController@setUserPoint');
+    $router->get('userpoint', 'ApiController@getUserPoint');
 });
