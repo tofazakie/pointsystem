@@ -5,12 +5,45 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/pointsystem/public/v1/setuserpoint": {
+        "/pointsystem/public/v1/userpoint": {
+            "get": {
+                "tags": [
+                    "userpoint"
+                ],
+                "summary": "Get User Points.",
+                "description": "GetUserPoint",
+                "operationId": "getuserpoint",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
-                    "SetUserPoint"
+                    "userpoint"
                 ],
-                "summary": "SetUserPoint. Set point both addition and reduction",
+                "summary": "Set User Point. Set point both addition and reduction",
                 "description": "SetUserPoint",
                 "operationId": "setuserpoint",
                 "parameters": [
@@ -67,7 +100,12 @@
                             "application/json": {}
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
             }
         },
         "/pointsystem/public/v1/login": {
@@ -118,6 +156,18 @@
                         }
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "apiAuth": {
+                "type": "http",
+                "description": "Login with email and password to get the authentication token",
+                "name": "Token based Based",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     }

@@ -17,9 +17,9 @@ class ApiController extends Controller
 {
     /**
      * @OA\Post(
-     *   path="/pointsystem/public/v1/setuserpoint",
-     *   tags={"SetUserPoint"},
-     *   summary="SetUserPoint. Set point both addition and reduction",
+     *   path="/pointsystem/public/v1/userpoint",
+     *   tags={"UserPoint"},
+     *   summary="Set User Point. Set point both addition and reduction",
      *   description="SetUserPoint",
      *   operationId="setuserpoint",
      *
@@ -77,7 +77,8 @@ class ApiController extends Controller
      *      @OA\MediaType(
      *           mediaType="application/json",
      *      )
-     *   )
+     *   ),
+     *   security={{ "apiAuth": {} }}
      *)
      **/
     public function setUserPoint(Request $request)
@@ -121,6 +122,38 @@ class ApiController extends Controller
     }
 
 
+    /**
+     * @OA\Get(
+     *   path="/pointsystem/public/v1/userpoint",
+     *   tags={"UserPoint"},
+     *   summary="Get User Points.",
+     *   description="GetUserPoint",
+     *   operationId="getuserpoint",
+     *
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthenticated",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=500,
+     *      description="Internal server error",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   security={{ "apiAuth": {} }}
+     *)
+     **/
     public function getUserPoint(Request $request)
     {
         $token = JWTAuth::getToken();
