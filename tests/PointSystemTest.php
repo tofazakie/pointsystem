@@ -108,7 +108,7 @@ class PointSystemTest extends TestCase
             'description' => 'order #4654'
         ];
 
-        $this->post('/v1/setuserpoint', $parameters, $headers);
+        $this->post('/v1/userpoint', $parameters, $headers);
         $this->seeStatusCode(200);
         $this->seeJsonStructure(
             [
@@ -141,7 +141,7 @@ class PointSystemTest extends TestCase
                         'Authorization' => 'Bearer ' . $token
                     ];
 
-        $this->get('/v1/getuserpoint', $headers);
+        $this->get('/v1/userpoint', $headers);
         $this->seeStatusCode(200);
         $this->seeJsonStructure(
             [
